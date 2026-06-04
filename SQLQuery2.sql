@@ -307,3 +307,53 @@ INSERT INTO Medicamentos (nombre_medicamento, id_tratamiento, fecha_vencimiento)
 ('Clonazepam 2mg', 9, '2028-09-09'),
 ('Pantoprazol 40mg', 10, '2025-06-15'); -- Ya Vencido (Para borrar luego)
 GO
+
+-- ============================================================================
+-- MÓDULO VI - UPDATE (ACTUALIZACIONES)
+-- ============================================================================
+
+-- 1. Actualizar teléfono de un paciente
+UPDATE Pacientes SET telefono = '8999-5555' WHERE id_paciente = 1;
+
+-- 2. Actualizar dirección de un paciente
+UPDATE Pacientes SET direccion = 'Managua, Bello Horizonte' WHERE id_paciente = 2;
+
+-- 3. Actualizar salario de un médico
+UPDATE Medicos SET salario = 4800.00 WHERE id_medico = 1;
+
+-- 4. Actualizar turno de un médico
+UPDATE Medicos SET turno = 'Noche' WHERE id_medico = 3;
+
+-- 5. Cambiar estado de una cita
+UPDATE Citas SET estado = 'Completada' WHERE id_cita = 3;
+
+-- 6. Actualizar costo de consulta
+UPDATE Citas SET costo_consulta = 55.00 WHERE id_cita = 1;
+
+-- 7. Actualizar nombre de especialidad
+UPDATE Especialidades SET nombre = 'Cardiología Avanzada' WHERE id_especialidad = 1;
+
+-- 8. Actualizar disponibilidad de habitación
+UPDATE Habitaciones SET disponibilidad = 0, id_paciente = 4 WHERE numero_habitacion = '101B';
+
+-- 9. Actualizar tratamiento activo
+UPDATE Tratamientos SET descripcion = 'Tratamiento Hipertensión Crónica y Dieta' WHERE id_tratamiento = 1;
+
+-- 10. Actualizar medicamento
+UPDATE Medicamentos SET nombre_medicamento = 'Enalapril Maleato 20mg' WHERE id_medicamento = 1;
+
+-- 11. Actualizar correo de paciente
+UPDATE Pacientes SET correo = 'juan.perez.nuevo@mail.com' WHERE id_paciente = 1;
+
+-- 12. Actualizar correo de médico
+UPDATE Medicos SET correo = 'carlos.mendieta@hospital.com' WHERE id_medico = 1;
+
+-- 13. Actualizar fecha de cita
+UPDATE Citas SET fecha_cita = DATEADD(DAY, 1, fecha_cita) WHERE id_cita = 4;
+
+-- 14. Actualizar experiencia del médico
+UPDATE Medicos SET experiencia = 11 WHERE id_medico = 1;
+
+-- 15. Actualizar tipo de sangre
+UPDATE Pacientes SET tipo_sangre = 'O-' WHERE id_paciente = 2;
+GO
