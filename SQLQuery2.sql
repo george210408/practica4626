@@ -145,3 +145,51 @@ ALTER TABLE Citas ALTER COLUMN costo_consulta DECIMAL(10,2); -- Modificado tipo 
 -- Modificaciones en Habitaciones
 ALTER TABLE Habitaciones ADD disponibilidad BIT CONSTRAINT DF_Habitaciones_Disponibilidad DEFAULT 1;
 GO
+
+-- ============================================================================
+-- MÓDULO IV - ELIMINACIÓN DE OBJETOS (DROP) DE PRUEBA
+-- ============================================================================
+
+-- 1. Eliminar una tabla temporal (creación y eliminación rápida)
+CREATE TABLE #TemporalPrueba (id INT);
+DROP TABLE #TemporalPrueba;
+
+-- 2. Eliminar una restricción CHECK (creación y eliminación)
+ALTER TABLE Pacientes ADD CONSTRAINT CK_Prueba_Borrar CHECK (edad < 150);
+ALTER TABLE Pacientes DROP CONSTRAINT CK_Prueba_Borrar;
+
+-- 3. Eliminar una restricción UNIQUE (creación y eliminación)
+ALTER TABLE Pacientes ADD CONSTRAINT UQ_Prueba_Telefono UNIQUE (telefono);
+ALTER TABLE Pacientes DROP CONSTRAINT UQ_Prueba_Telefono;
+
+-- 4. Eliminar una columna (creación y eliminación)
+ALTER TABLE Pacientes ADD columna_eliminar INT;
+ALTER TABLE Pacientes DROP COLUMN columna_eliminar;
+
+-- 5 y 9. Crear y eliminar tabla de pruebas / MedicamentosPrueba
+CREATE TABLE MedicamentosPrueba (id INT);
+DROP TABLE MedicamentosPrueba;
+
+-- 6. Crear y eliminar tabla Auditoria
+CREATE TABLE Auditoria (id_auditoria INT, fecha DATETIME);
+DROP TABLE Auditoria;
+
+-- 7. Crear y eliminar tabla Logs
+CREATE TABLE Logs (id_log INT, mensaje VARCHAR(MAX));
+DROP TABLE Logs;
+
+-- 8. Eliminar una FOREIGN KEY (creación de una llave de prueba y su posterior eliminación)
+ALTER TABLE Citas ADD id_prueba_fk INT;
+ALTER TABLE Citas ADD CONSTRAINT FK_Prueba_Borrar FOREIGN KEY (id_prueba_fk) REFERENCES Pacientes(id_paciente);
+ALTER TABLE Citas DROP CONSTRAINT FK_Prueba_Borrar;
+ALTER TABLE Citas DROP COLUMN id_prueba_fk;
+
+-- 10. Eliminar una base de datos de pruebas
+IF EXISTS (SELECT name FROM sys.databases WHERE name = 'DB_Pruebas_Borrar')
+    DROP DATABASE DB_Pruebas_Borrar;
+GO
+-- Creamos una ficticia rápido y la borramos
+CREATE DATABASE DB_Pruebas_Borrar;
+GO
+DROP DATABASE DB_Pruebas_Borrar;
+GO
