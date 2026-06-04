@@ -116,3 +116,32 @@ ALTER TABLE Medicamentos ADD CONSTRAINT FK_Medicamentos_Tratamientos
 ALTER TABLE Habitaciones ADD CONSTRAINT FK_Habitaciones_Pacientes 
     FOREIGN KEY (id_paciente) REFERENCES Pacientes(id_paciente);
 GO
+
+-- ============================================================================
+-- MÓDULO III - MODIFICACIÓN DE ESTRUCTURAS (ALTER)
+-- ============================================================================
+
+-- Modificaciones en Pacientes
+ALTER TABLE Pacientes ADD telefono VARCHAR(20);
+ALTER TABLE Pacientes ADD direccion VARCHAR(100);
+ALTER TABLE Pacientes ADD genero CHAR(1);
+ALTER TABLE Pacientes ADD tipo_sangre VARCHAR(5);
+ALTER TABLE Pacientes ADD fecha_nacimiento DATE;
+
+ALTER TABLE Pacientes ALTER COLUMN nombre VARCHAR(150) NOT NULL;
+ALTER TABLE Pacientes ALTER COLUMN direccion VARCHAR(250);
+
+-- Modificaciones en Médicos
+ALTER TABLE Medicos ADD experiencia INT;
+ALTER TABLE Medicos ADD turno VARCHAR(20);
+ALTER TABLE Medicos ADD observaciones VARCHAR(500);
+ALTER TABLE Medicos DROP COLUMN observaciones; -- Se elimina según requerimiento de módulo III
+
+-- Modificaciones en Citas
+ALTER TABLE Citas ADD estado VARCHAR(20);
+ALTER TABLE Citas ADD costo_consulta INT; -- Agregada inicialmente como INT
+ALTER TABLE Citas ALTER COLUMN costo_consulta DECIMAL(10,2); -- Modificado tipo de dato
+
+-- Modificaciones en Habitaciones
+ALTER TABLE Habitaciones ADD disponibilidad BIT CONSTRAINT DF_Habitaciones_Disponibilidad DEFAULT 1;
+GO
