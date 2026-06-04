@@ -70,3 +70,49 @@ CREATE TABLE Medicamentos (
     fecha_vencimiento DATE
 );
 GO
+
+
+
+-- Primary Keys
+ALTER TABLE Especialidades ADD CONSTRAINT PK_Especialidades PRIMARY KEY (id_especialidad);
+ALTER TABLE Medicos ADD CONSTRAINT PK_Medicos PRIMARY KEY (id_medico);
+ALTER TABLE Pacientes ADD CONSTRAINT PK_Pacientes PRIMARY KEY (id_paciente);
+ALTER TABLE Citas ADD CONSTRAINT PK_Citas PRIMARY KEY (id_cita);
+ALTER TABLE Habitaciones ADD CONSTRAINT PK_Habitaciones PRIMARY KEY (id_habitacion);
+ALTER TABLE Tratamientos ADD CONSTRAINT PK_Tratamientos PRIMARY KEY (id_tratamiento);
+ALTER TABLE Medicamentos ADD CONSTRAINT PK_Medicamentos PRIMARY KEY (id_medicamento);
+
+-- Not Null
+ALTER TABLE Pacientes ALTER COLUMN nombre VARCHAR(50) NOT NULL;
+ALTER TABLE Medicos ALTER COLUMN nombre VARCHAR(50) NOT NULL;
+
+-- Uniques
+ALTER TABLE Pacientes ADD CONSTRAINT UQ_Pacientes_Correo UNIQUE (correo);
+ALTER TABLE Medicos ADD CONSTRAINT UQ_Medicos_Correo UNIQUE (correo);
+
+-- Checks
+ALTER TABLE Pacientes ADD CONSTRAINT CK_Pacientes_Edad CHECK (edad >= 0);
+ALTER TABLE Medicos ADD CONSTRAINT CK_Medicos_Salario CHECK (salario > 0);
+
+-- Defaults
+ALTER TABLE Pacientes ADD CONSTRAINT DF_Pacientes_FechaRegistro DEFAULT GETDATE() FOR fecha_registro;
+
+-- Foreign Keys
+ALTER TABLE Medicos ADD CONSTRAINT FK_Medicos_Especialidades 
+    FOREIGN KEY (id_especialidad) REFERENCES Especialidades(id_especialidad);
+
+ALTER TABLE Citas ADD CONSTRAINT FK_Citas_Pacientes 
+    FOREIGN KEY (id_paciente) REFERENCES Pacientes(id_paciente);
+
+ALTER TABLE Citas ADD CONSTRAINT FK_Citas_Medicos 
+    FOREIGN KEY (id_medico) REFERENCES Medicos(id_medico);
+
+ALTER TABLE Tratamientos ADD CONSTRAINT FK_Tratamientos_Pacientes 
+    FOREIGN KEY (id_paciente) REFERENCES Pacientes(id_paciente);
+
+ALTER TABLE Medicamentos ADD CONSTRAINT FK_Medicamentos_Tratamientos 
+    FOREIGN KEY (id_tratamiento) REFERENCES Tratamientos(id_tratamiento);
+
+ALTER TABLE Habitaciones ADD CONSTRAINT FK_Habitaciones_Pacientes 
+    FOREIGN KEY (id_paciente) REFERENCES Pacientes(id_paciente);
+GO
