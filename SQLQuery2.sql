@@ -399,3 +399,46 @@ DELETE FROM Medicamentos WHERE fecha_vencimiento < GETDATE();
 -- 10. Eliminar registros de prueba (Ejemplo de purga conceptual en cascada si existieran remanentes)
 -- (Ya se ejecutó arriba al limpiar pacientes sin citas y cascadas controladas).
 GO
+
+-- ============================================================================
+-- MÓDULO VIII - CONSULTAS SELECT
+-- ============================================================================
+
+-- 1. Mostrar todos los pacientes
+SELECT * FROM Pacientes;
+
+-- 2. Mostrar todos los médicos
+SELECT * FROM Medicos;
+
+-- 3. Mostrar todas las especialidades
+SELECT * FROM Especialidades;
+
+-- 4. Mostrar todas las citas
+SELECT * FROM Citas;
+
+-- 5. Mostrar pacientes ordenados por apellido (Asumiendo primer orden jerárquico por nombre/campo actual)
+SELECT * FROM Pacientes 
+ORDER BY nombre ASC;
+
+-- 6. Mostrar médicos ordenados por salario (De mayor a menor)
+SELECT * FROM Medicos 
+ORDER BY salario DESC;
+
+-- 7. Mostrar citas del día actual
+SELECT * FROM Citas 
+WHERE CAST(fecha_cita AS DATE) = CAST(GETDATE() AS DATE);
+
+-- 8. Mostrar habitaciones disponibles (Dado que borramos las disponibles en el Módulo VII, esta consulta devolverá vacío o las remanentes)
+SELECT * FROM Habitaciones 
+WHERE disponibilidad = 1;
+
+-- 9. Mostrar cantidad de pacientes registrados
+SELECT COUNT(*) AS TotalPacientes 
+FROM Pacientes;
+
+-- 10. Mostrar cantidad de citas por médico
+SELECT M.nombre AS Medico, COUNT(C.id_cita) AS CantidadCitas
+FROM Medicos M
+LEFT JOIN Citas C ON M.id_medico = C.id_medico
+GROUP BY M.nombre;
+GO
