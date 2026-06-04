@@ -357,3 +357,45 @@ UPDATE Medicos SET experiencia = 11 WHERE id_medico = 1;
 -- 15. Actualizar tipo de sangre
 UPDATE Pacientes SET tipo_sangre = 'O-' WHERE id_paciente = 2;
 GO
+
+-- ============================================================================
+-- MÓDULO VII - DELETE (ELIMINACIÓN DE REGISTROS)
+-- ============================================================================
+
+-- Nota: Para respetar la integridad referencial (Foreign Keys), se borran primero 
+-- las dependencias de los registros específicos que se van a eliminar.
+
+-- 1. Eliminar un paciente específico (id_paciente = 20, no tiene dependencias críticas creadas)
+DELETE FROM Pacientes WHERE id_paciente = 20;
+
+-- 2. Eliminar una cita específica
+DELETE FROM Citas WHERE id_cita = 15;
+
+-- 3. Eliminar un medicamento
+DELETE FROM Medicamentos WHERE id_medicamento = 11;
+
+-- 4. Eliminar una habitación
+DELETE FROM Habitaciones WHERE id_habitacion = 10;
+
+-- 5. Eliminar un tratamiento específico (id_tratamiento = 10 tiene medicamentos vencidos, los borramos primero)
+DELETE FROM Medicamentos WHERE id_tratamiento = 10;
+DELETE FROM Tratamientos WHERE id_tratamiento = 10;
+
+-- 6. Eliminar citas canceladas
+DELETE FROM Citas WHERE estado = 'Cancelada';
+
+-- 7. Eliminar pacientes sin citas (Aquellos que no tengan registros en la tabla Citas)
+DELETE FROM Habitaciones WHERE id_paciente IN (SELECT id_paciente FROM Pacientes WHERE id_paciente NOT IN (SELECT id_paciente FROM Citas));
+DELETE FROM Medicamentos WHERE id_tratamiento IN (SELECT id_tratamiento FROM Tratamientos WHERE id_paciente NOT IN (SELECT id_paciente FROM Citas));
+DELETE FROM Tratamientos WHERE id_paciente NOT IN (SELECT id_paciente FROM Citas);
+DELETE FROM Pacientes WHERE id_paciente NOT IN (SELECT id_paciente FROM Citas);
+
+-- 8. Eliminar habitaciones vacías (disponibles)
+DELETE FROM Habitaciones WHERE disponibilidad = 1;
+
+-- 9. Eliminar medicamentos vencidos (A la fecha actual del sistema)
+DELETE FROM Medicamentos WHERE fecha_vencimiento < GETDATE();
+
+-- 10. Eliminar registros de prueba (Ejemplo de purga conceptual en cascada si existieran remanentes)
+-- (Ya se ejecutó arriba al limpiar pacientes sin citas y cascadas controladas).
+GO
