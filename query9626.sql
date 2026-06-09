@@ -193,3 +193,22 @@ UPDATE proyectos.TProyecto SET dFechaFinalizacion = '2026-12-31' WHERE nProyecto
 
 -- 48. Asignar un nuevo proyecto a un empleado
 INSERT INTO proyectos.TEmpleadoProyecto (nEmpleadoID, nProyectoID) VALUES (1, 2);
+
+-- 49. Eliminar un empleado específico mediante su NIF
+DELETE FROM proyectos.TEmpleadoProyecto WHERE nEmpleadoID = (SELECT nEmpleadoID FROM rrhh.TEmpleado WHERE cNIF = '54321678Z');
+DELETE FROM rrhh.TEmpleado WHERE cNIF = '54321678Z';
+
+-- 50. Eliminar todos los empleados inactivos
+DELETE FROM proyectos.TEmpleadoProyecto WHERE nEmpleadoID IN (SELECT nEmpleadoID FROM rrhh.TEmpleado WHERE bActivo = 0);
+DELETE FROM rrhh.TEmpleado WHERE bActivo = 0;
+
+-- 51. Eliminar un proyecto específico
+DELETE FROM proyectos.TEmpleadoProyecto WHERE nProyectoID = 3;
+DELETE FROM proyectos.TProyecto WHERE nProyectoID = 3;
+
+-- 52. Eliminar las asignaciones de un empleado en la tabla TEmpleadoProyecto
+DELETE FROM proyectos.TEmpleadoProyecto WHERE nEmpleadoID = 1;
+
+-- 53. Eliminar un departamento que no tenga empleados asociados
+DELETE FROM rrhh.TDepartamento 
+WHERE nDepartamentoID NOT IN (SELECT DISTINCT nDepartamentoID FROM rrhh.TEmpleado WHERE nDepartamentoID IS NOT NULL);
