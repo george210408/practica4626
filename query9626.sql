@@ -118,3 +118,55 @@ CREATE TABLE rrhh.TSucursal (
     cNombreSucursal VARCHAR(100) NOT NULL,
     cUbicacion VARCHAR(150)
 );
+
+-- 31. Insertar 5 departamentos diferentes
+INSERT INTO rrhh.TDepartamento (cNombreDepartamento) VALUES 
+('Tecnología'), ('Recursos Humanos'), ('Finanzas'), ('Ventas'), ('Marketing');
+
+-- 32. Insertar 5 cargos diferentes
+INSERT INTO rrhh.TCargo (cNombreCargo) VALUES 
+('Desarrollador'), ('Analista de RRHH'), ('Contador'), ('Asesor Comercial'), ('Gerente');
+
+-- 33. Insertar 10 empleados
+INSERT INTO rrhh.TEmpleado (cNIF, cNombre, cApellido, nDepartamentoID, nCargoID, nSalario, nEdad, cGenero, cEmail, cTelefono) VALUES
+('11111111A', 'Juan', 'Pérez', 1, 1, 1200.00, 30, 'M', 'juan.perez@empresa.com', '555-0011'),
+('22222222B', 'Ana', 'Gómez', 2, 2, 950.00, 28, 'F', 'ana.gomez@empresa.com', '555-0022'),
+('33333333C', 'Carlos', 'Rodríguez', 3, 3, 1100.00, 45, 'M', 'carlos.rod@empresa.com', '555-0033'),
+('44444444D', 'María', 'López', 4, 4, 850.00, 24, 'F', 'maria.lopez@empresa.com', '555-0044'),
+('55555555E', 'Luis', 'García', 1, 1, 1300.00, 35, 'M', 'luis.garcia@empresa.com', '555-0055'),
+('66666666F', 'Laura', 'Martínez', 5, 5, 2000.00, 40, 'F', 'laura.mar@empresa.com', '555-0066'),
+('77777777G', 'Pedro', 'González', 1, 1, 1250.00, 32, 'M', 'pedro.gonz@empresa.com', '555-0077'),
+('88888888H', 'Sofía', 'Castro', 3, 3, 400.00, 22, 'F', 'sofia.castro@empresa.com', '555-0088'),
+('99999999I', 'Diego', 'Sánchez', 4, 4, 450.00, 29, 'M', 'diego.san@empresa.com', '555-0089'),
+('00000000J', 'Elena', 'Ruiz', 2, 2, 900.00, 50, 'F', 'elena.ruiz@empresa.com', '555-0090');
+
+-- 34. Insertar 3 proyectos
+INSERT INTO proyectos.TProyecto (cNombreProyecto, dFechaInicio, dFechaFinalizacion) VALUES
+('Migración Cloud', '2026-01-15', '2026-08-30'),
+('Reclutamiento 2026', '2026-02-01', NULL),
+('Auditoría Anual', '2026-03-01', '2026-06-15');
+
+-- 35. Asignar empleados a proyectos
+INSERT INTO proyectos.TEmpleadoProyecto (nEmpleadoID, nProyectoID) VALUES
+(1, 1), (5, 1), (7, 1), (2, 2), (10, 2), (3, 3);
+
+-- 36. Insertar un empleado utilizando el valor por defecto de fecha
+INSERT INTO rrhh.TEmpleado (cNIF, cNombre, cApellido, nDepartamentoID, nCargoID, nSalario, nEdad, cGenero, cEmail)
+VALUES ('12345678X', 'Miguel', 'Torres', 1, 1, 1400.00, 33, 'M', 'miguel.torres@empresa.com');
+
+-- 37. Insertar un empleado con correo electrónico
+INSERT INTO rrhh.TEmpleado (cNIF, cNombre, cApellido, nDepartamentoID, nCargoID, nSalario, nEdad, cGenero, cEmail)
+VALUES ('87654321Y', 'Carmen', 'Ortiz', 4, 4, 880.00, 27, 'F', 'carmen.ortiz@empresa.com');
+
+-- 38. Insertar un empleado sin indicar estado activo
+INSERT INTO rrhh.TEmpleado (cNIF, cNombre, cApellido, nDepartamentoID, nCargoID, nSalario, nEdad, cGenero, cEmail)
+VALUES ('54321678Z', 'Jorge', 'Giménez', 1, 1, 1150.00, 31, 'M', 'jorge.gim@empresa.com');
+
+-- 39. Insertar registros usando múltiples VALUES
+INSERT INTO rrhh.TDepartamento (cNombreDepartamento) VALUES 
+('Logística'), ('Calidad'), ('Soporte Técnico');
+
+-- 40. Intentar insertar un salario negativo y analizar el error
+INSERT INTO rrhh.TEmpleado (cNIF, cNombre, cApellido, nSalario) VALUES ('00000000X', 'Error', 'Test', -100);
+-- ANÁLISIS: Rompe la restricción 'CHK_Salario' del esquema 'rrhh'.
+
