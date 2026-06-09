@@ -70,3 +70,51 @@ CREATE TABLE proyectos.TEmpleadoProyecto (
     CONSTRAINT FK_EmpProj_Proyecto FOREIGN KEY (nProyectoID) REFERENCES proyectos.TProyecto(nProyectoID)
 );
 
+-- 16. Agregar columna cEmail a TEmpleado
+ALTER TABLE rrhh.TEmpleado ADD cEmail VARCHAR(100);
+
+-- 17. Agregar columna cTelefono
+ALTER TABLE rrhh.TEmpleado ADD cTelefono VARCHAR(15);
+
+-- 18. Modificar longitud de cNombre a 100 caracteres
+ALTER TABLE rrhh.TEmpleado ALTER COLUMN cNombre VARCHAR(100) NOT NULL;
+
+-- 19. Modificar longitud de cApellido a 100 caracteres
+ALTER TABLE rrhh.TEmpleado ALTER COLUMN cApellido VARCHAR(100) NOT NULL;
+
+-- 20. Agregar columna cDireccion
+ALTER TABLE rrhh.TEmpleado ADD cDireccion VARCHAR(200);
+
+-- 21. Agregar columna nEdad
+ALTER TABLE rrhh.TEmpleado ADD nEdad INT;
+
+-- 22. Crear restricción CHECK para edades entre 18 y 65 años
+ALTER TABLE rrhh.TEmpleado ADD CONSTRAINT CHK_Edad CHECK (nEdad BETWEEN 18 AND 65);
+
+-- 23. Agregar restricción UNIQUE al correo electrónico
+ALTER TABLE rrhh.TEmpleado ADD CONSTRAINT UQ_Email UNIQUE (cEmail);
+
+-- 24. Agregar columna bActivo tipo BIT con valor por defecto 1
+ALTER TABLE rrhh.TEmpleado ADD bActivo BIT DEFAULT 1 WITH VALUES; 
+
+-- 25. Eliminar la columna cDireccion
+ALTER TABLE rrhh.TEmpleado DROP COLUMN cDireccion;
+
+-- 26. Cambiar el tipo de dato de teléfono a VARCHAR(20)
+ALTER TABLE rrhh.TEmpleado ALTER COLUMN cTelefono VARCHAR(20);
+
+-- 27. Agregar columna cGenero
+ALTER TABLE rrhh.TEmpleado ADD cGenero CHAR(1);
+
+-- 28. Agregar restricción CHECK para que el género solo permita M o F
+ALTER TABLE rrhh.TEmpleado ADD CONSTRAINT CHK_Genero CHECK (cGenero IN ('M', 'F'));
+
+-- 29. Agregar columna dFechaNacimiento
+ALTER TABLE rrhh.TEmpleado ADD dFechaNacimiento DATE;
+
+-- 30. Crear una nueva tabla llamada TSucursal (la asignaremos a rrhh)
+CREATE TABLE rrhh.TSucursal (
+    nSucursalID INT IDENTITY(1,1) PRIMARY KEY,
+    cNombreSucursal VARCHAR(100) NOT NULL,
+    cUbicacion VARCHAR(150)
+);
