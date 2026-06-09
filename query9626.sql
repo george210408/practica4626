@@ -170,3 +170,26 @@ INSERT INTO rrhh.TDepartamento (cNombreDepartamento) VALUES
 INSERT INTO rrhh.TEmpleado (cNIF, cNombre, cApellido, nSalario) VALUES ('00000000X', 'Error', 'Test', -100);
 -- ANÁLISIS: Rompe la restricción 'CHK_Salario' del esquema 'rrhh'.
 
+-- 41. Incrementar en 10% el salario de todos los empleados
+UPDATE rrhh.TEmpleado SET nSalario = nSalario * 1.10;
+
+-- 42. Incrementar en 20% el salario de los empleados de un departamento específico (Ej: Departamento 1)
+UPDATE rrhh.TEmpleado SET nSalario = nSalario * 1.20 WHERE nDepartamentoID = 1;
+
+-- 43. Actualizar el correo electrónico de un empleado
+UPDATE rrhh.TEmpleado SET cEmail = 'juan.perez.nuevo@empresa.com' WHERE cNIF = '11111111A';
+
+-- 44. Modificar el cargo de un empleado
+UPDATE rrhh.TEmpleado SET nCargoID = 5 WHERE nEmpleadoID = 1;
+
+-- 45. Cambiar el departamento de dos empleados
+UPDATE rrhh.TEmpleado SET nDepartamentoID = 3 WHERE nEmpleadoID IN (2, 4);
+
+-- 46. Marcar como inactivos a los empleados con salario inferior a 500
+UPDATE rrhh.TEmpleado SET bActivo = 0 WHERE nSalario < 500;
+
+-- 47. Actualizar la fecha de finalización de un proyecto
+UPDATE proyectos.TProyecto SET dFechaFinalizacion = '2026-12-31' WHERE nProyectoID = 2;
+
+-- 48. Asignar un nuevo proyecto a un empleado
+INSERT INTO proyectos.TEmpleadoProyecto (nEmpleadoID, nProyectoID) VALUES (1, 2);
