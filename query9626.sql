@@ -318,3 +318,86 @@ USE master;
 GO
 DROP DATABASE EmpresaSQL;
 GO
+
+-- 81. Crear una tabla TCliente en el esquema ventas
+CREATE TABLE ventas.TCliente (
+    nClienteID INT IDENTITY(1,1) PRIMARY KEY,
+    cDocumento VARCHAR(20) UNIQUE NOT NULL,
+    cNombre VARCHAR(100) NOT NULL,
+    cApellido VARCHAR(100) NOT NULL,
+    cEmail VARCHAR(100) UNIQUE,
+    cTelefono VARCHAR(20),
+    dFechaRegistro DATE DEFAULT GETDATE(),
+    nEdad INT CHECK (nEdad >= 18),
+    bEstado BIT DEFAULT 1
+);
+
+-- 82. Crear una tabla TVenta relacionada en el esquema ventas
+CREATE TABLE ventas.TVenta (
+    nVentaID INT IDENTITY(1,1) PRIMARY KEY,
+    nClienteID INT NOT NULL,
+    dFechaVenta DATETIME DEFAULT GETDATE(),
+    nMontoTotal DECIMAL(10,2) CHECK (nMontoTotal > 0),
+    cMetodoPago VARCHAR(30) CHECK (cMetodoPago IN ('Efectivo', 'Tarjeta', 'Transferencia')),
+    CONSTRAINT FK_Venta_Cliente FOREIGN KEY (nClienteID) REFERENCES ventas.TCliente(nClienteID)
+);
+
+-- 83. Registrar 20 clientes
+INSERT INTO ventas.TCliente (cDocumento, cNombre, cApellido, cEmail, nEdad) VALUES
+('ID01', 'Carlos', 'Meza', 'carlos@mail.com', 25), ('ID02', 'Maria', 'Solis', 'maria@mail.com', 30),
+('ID03', 'Jorge', 'Luna', 'jorge@mail.com', 40), ('ID04', 'Rosa', 'Diaz', 'rosa@mail.com', 22),
+('ID05', 'Luis', 'Paz', 'luis@mail.com', 35), ('ID06', 'Elena', 'Rios', 'elena@mail.com', 28),
+('ID07', 'Pedro', 'Soto', 'pedro@mail.com', 50), ('ID08', 'Lucia', 'Cruz', 'lucia@mail.com', 45),
+('ID09', 'Andres', 'Gomez', 'andres@mail.com', 19), ('ID10', 'Sofia', 'Vega', 'sofia@mail.com', 31),
+('ID11', 'Mario', 'Silva', 'mario@mail.com', 26), ('ID12', 'Laura', 'Ferrer', 'laura@mail.com', 34),
+('ID13', 'Diego', 'Mendoza', 'diego@mail.com', 23), ('ID14', 'Paula', 'Campos', 'paula@mail.com', 38),
+('ID15', 'Raul', 'Ortega', 'raul@mail.com', 42), ('ID16', 'Natalia', 'Fuentes', 'natalia@mail.com', 27),
+('ID17', 'Javier', 'Delgado', 'javier@mail.com', 48), ('ID18', 'Irene', 'Castillo', 'irene@mail.com', 29),
+('ID19', 'Tomas', 'Pardo', 'tomas@mail.com', 55), ('ID20', 'Sara', 'Guzman', 'sara@mail.com', 33);
+
+-- 84. Registrar ventas
+INSERT INTO ventas.TVenta (nClienteID, dFechaVenta, nMontoTotal, cMetodoPago) VALUES
+(1, '2026-01-10', 150.00, 'Tarjeta'), (1, '2026-01-15', 50.00, 'Efectivo'),
+(2, '2026-01-20', 300.00, 'Transferencia'), (3, '2026-02-05', 450.00, 'Tarjeta'),
+(4, '2026-02-12', 80.00, 'Efectivo'), (5, '2026-02-25', 500.00, 'Transferencia'),
+(6, '2026-03-02', 120.00, 'Tarjeta'), (7, '2026-03-10', 250.00, 'Efectivo'),
+(8, '2026-03-15', 95.00, 'Tarjeta'), (9, '2026-04-01', 60.00, 'Efectivo'),
+(10, '2026-04-05', 700.00, 'Transferencia'), (11, '2026-04-12', 110.00, 'Tarjeta'),
+(12, '2026-04-18', 180.00, 'Efectivo'), (13, '2026-05-02', 220.00, 'Transferencia'),
+(14, '2026-05-09', 310.00, 'Tarjeta'), (15, '2026-05-14', 415.00, 'Efectivo'),
+(1, '2026-05-20', 90.00, 'Tarjeta'), (2, '2026-06-01', 130.00, 'Efectivo'),
+(3, '2026-06-04', 550.00, 'Transferencia'), (4, '2026-06-05', 25.00, 'Efectivo');
+
+-- 85. Actualizar precios o montos de ventas según una condición
+UPDATE ventas.TVenta SET nMontoTotal = nMontoTotal * 1.05 WHERE cMetodoPago = 'Tarjeta';
+
+-- 86. Eliminar clientes sin ventas
+DELETE FROM ventas.TCliente WHERE nClienteID NOT IN (SELECT DISTINCT nClienteID FROM ventas.TVenta);
+
+-- 87. Consultar los 5 clientes con mayores compras
+SELECT TOP 5 C.nClienteID, C.cNombre, C.cApellido, SUM(V.nMontoTotal) AS TotalComprado
+FROM ventas.TCliente C
+INNER JOIN ventas.TVenta V ON C.nClienteID = V.nClienteID
+GROUP BY C.nClienteID, C.cNombre, C.cApellido
+ORDER BY TotalComprado DESC;
+
+-- 88. Consultar ventas por mes
+SELECT MONTH(dFechaVenta) AS Mes, YEAR(dFechaVenta) AS Anio, COUNT(*) AS TotalVentas, SUM(nMontoTotal) AS Facturacion
+FROM ventas.TVenta
+GROUP BY YEAR(dFechaVenta), MONTH(dFechaVenta)
+ORDER BY Anio, Mes;
+
+-- 89. Consultar promedio de ventas por cliente
+SELECT C.cNombre, C.cApellido, AVG(V.nMontoTotal) AS PromedioVenta
+FROM ventas.TCliente C
+INNER JOIN ventas.TVenta V ON C.nClienteID = V.nClienteID
+GROUP BY C.nClienteID, C.cNombre, C.cApellido;
+
+-- 90. Reporte consolidado uniendo 3 tablas (Esquemas cruzados: rrhh, ventas)
+-- Ejemplo práctico: Mostrar qué cliente compró, qué empleado de "Ventas" tiene su mismo apellido (Coincidencia familiar/comercial conceptual)
+SELECT C.cNombre AS ClienteNombre, C.cApellido AS ClienteApellido, 
+       V.nMontoTotal, V.dFechaVenta,
+       E.cNombre AS AtendidoPorSemejanza
+FROM ventas.TCliente C
+INNER JOIN ventas.TVenta V ON C.nClienteID = V.nClienteID
+LEFT JOIN rrhh.TEmpleado E ON C.cApellido = E.cApellido;
