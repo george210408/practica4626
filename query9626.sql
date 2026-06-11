@@ -283,3 +283,38 @@ SELECT COUNT(*) AS TotalActivos FROM rrhh.TEmpleado WHERE bActivo = 1;
 
 -- 70. Mostrar el total de proyectos registrados
 SELECT COUNT(*) AS TotalProyectos FROM proyectos.TProyecto;
+
+-- 71. Eliminar la restricción CHECK de edad
+ALTER TABLE rrhh.TEmpleado DROP CONSTRAINT CHK_Edad;
+
+-- 72. Eliminar la restricción UNIQUE del correo
+ALTER TABLE rrhh.TEmpleado DROP CONSTRAINT UQ_Email;
+
+-- 73. Agregar nuevamente ambas restricciones
+ALTER TABLE rrhh.TEmpleado ADD CONSTRAINT CHK_Edad CHECK (nEdad BETWEEN 18 AND 65);
+ALTER TABLE rrhh.TEmpleado ADD CONSTRAINT UQ_Email UNIQUE (cEmail);
+
+-- ELIMINACIÓN PROPAGADA RESPETANDO ESQUEMAS
+-- 74. Eliminar la tabla TEmpleadoProyecto
+DROP TABLE proyectos.TEmpleadoProyecto;
+
+-- 75. Eliminar la tabla TProyecto
+DROP TABLE proyectos.TProyecto;
+
+-- 76. Eliminar la tabla TEmpleado
+DROP TABLE rrhh.TEmpleado;
+
+-- 77. Eliminar la tabla TCargo
+DROP TABLE rrhh.TCargo;
+
+-- 78. Eliminar la tabla TDepartamento
+DROP TABLE rrhh.TDepartamento;
+
+-- 79. Eliminar la tabla TSucursal
+DROP TABLE rrhh.TSucursal;
+
+-- 80. Eliminar la base de datos EmpresaSQL
+USE master;
+GO
+DROP DATABASE EmpresaSQL;
+GO
